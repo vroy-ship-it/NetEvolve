@@ -1,0 +1,702 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetEvolve — Network Automation Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --white: #FFFFFF; --bg: #F5F5F5; --border: #E0E0E0; --muted: #9E9E9E;
+            --text: #424242; --heading: #212121; --black: #000000;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* TOP NAV */
+        .topnav { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 100; }
+        .topnav-left { display: flex; align-items: center; gap: 32px; }
+        .logo { font-size: 18px; font-weight: 800; color: var(--heading); letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        .logo-icon { width: 28px; height: 28px; background: var(--heading); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon svg { color: var(--white); width: 16px; height: 16px; }
+        .nav-tabs { display: flex; gap: 4px; }
+        .nav-tabs > * { pointer-events: auto; }
+        .nav-tab { padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--muted); background: none; border: none; border-radius: 6px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+        .nav-tab:hover { color: var(--text); background: var(--bg); }
+        .nav-tab.active { color: var(--heading); background: var(--bg); font-weight: 600; }
+        .nav-tab .admin-badge { font-size: 9px; font-weight: 700; background: var(--heading); color: var(--white); padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: top; }
+        .topnav-right { display: flex; align-items: center; gap: 12px; }
+        .ai-trigger-btn { display: flex; align-items: center; gap: 8px; padding: 7px 14px; background: var(--heading); color: var(--white); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
+        .ai-trigger-btn:hover { background: var(--black); }
+        .ai-trigger-btn svg { width: 16px; height: 16px; }
+        .ai-trigger-btn kbd { font-size: 10px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 1px 5px; font-family: inherit; margin-left: 4px; }
+        .icon-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+        .icon-btn:hover { background: var(--bg); }
+        .icon-btn svg { color: var(--text); width: 18px; height: 18px; }
+        .badge-count { position: absolute; top: -4px; right: -4px; background: var(--heading); color: var(--white); font-size: 10px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--white); }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--border); border: 2px solid var(--border); cursor: pointer; }
+
+        /* LAYOUT */
+        .app-layout { display: flex; margin-top: 56px; height: calc(100vh - 56px); }
+        .sidebar { width: 240px; background: var(--white); border-right: 1px solid var(--border); padding: 20px 16px; display: flex; flex-direction: column; gap: 20px; flex-shrink: 0; overflow-y: auto; }
+        .sidebar-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 8px; }
+        .sidebar-select { width: 100%; padding: 8px 10px; font-size: 13px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); color: var(--text); font-family: inherit; cursor: pointer; }
+        .sidebar-check-group { display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); cursor: pointer; }
+        .sidebar-check input { width: 16px; height: 16px; accent-color: var(--heading); cursor: pointer; }
+        .sidebar-toggle { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text); }
+        .toggle-switch { width: 36px; height: 20px; background: var(--border); border-radius: 10px; position: relative; cursor: pointer; }
+        .toggle-switch.active { background: var(--heading); }
+        .toggle-switch::after { content: ''; position: absolute; width: 16px; height: 16px; background: var(--white); border-radius: 50%; top: 2px; left: 2px; transition: transform 0.2s; }
+        .toggle-switch.active::after { transform: translateX(16px); }
+        .sidebar-date-group { display: flex; flex-direction: column; gap: 6px; }
+        .sidebar-date-input { width: 100%; padding: 7px 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; color: var(--text); }
+        .sidebar-radio-group { display: flex; flex-direction: column; gap: 6px; }
+        .sidebar-radio { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); cursor: pointer; }
+        .sidebar-radio input { accent-color: var(--heading); }
+        .main-content { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+
+        /* SHARED */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .section-title { font-size: 15px; font-weight: 700; color: var(--heading); }
+        .section-subtitle { font-size: 12px; font-weight: 400; color: var(--muted); margin-left: 8px; }
+        .section-link { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; cursor: pointer; }
+        .section-link:hover { color: var(--text); }
+        .area-tag { display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 600; border-radius: 4px; background: #EEEEEE; color: var(--text); }
+        .btn-outline { padding: 7px 16px; font-size: 13px; font-weight: 600; background: var(--white); color: var(--text); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-outline:hover { background: var(--bg); border-color: var(--muted); }
+        .btn-outline svg { width: 14px; height: 14px; }
+        .btn-solid { padding: 7px 16px; font-size: 13px; font-weight: 700; background: var(--heading); color: var(--white); border: none; border-radius: 6px; cursor: pointer; font-family: inherit; }
+        .btn-solid:hover { background: var(--black); }
+        .btn-solid:disabled { background: var(--border); color: var(--muted); cursor: default; }
+        .hidden { display: none !important; }
+
+        /* TABLES */
+        .table-wrapper { background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--card-shadow); overflow: hidden; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table thead th { padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); background: var(--bg); cursor: pointer; white-space: nowrap; }
+        .data-table thead th:hover { color: var(--text); }
+        .data-table tbody tr { border-bottom: 1px solid #F0F0F0; transition: background 0.1s; }
+        .data-table tbody tr:hover { background: #FAFAFA; }
+        .data-table tbody tr:last-child { border-bottom: none; }
+        .data-table tbody td { padding: 12px 16px; font-size: 13px; color: var(--text); vertical-align: middle; white-space: nowrap; }
+        .table-pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--bg); }
+        .table-pagination span { font-size: 12px; color: var(--muted); }
+        .pagination-btns { display: flex; gap: 4px; }
+        .pagination-btns button { width: 32px; height: 32px; border: 1px solid var(--border); background: var(--white); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; font-family: inherit; }
+        .pagination-btns button.active-page { background: var(--heading); color: var(--white); border-color: var(--heading); }
+
+        /* OVERVIEW BAR */
+        .overview-bar { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--card-shadow); flex-wrap: wrap; gap: 12px; }
+        .bar-left { display: flex; align-items: center; gap: 12px; }
+        .bar-context { font-size: 16px; font-weight: 800; color: var(--heading); }
+        .bar-range { font-size: 13px; color: var(--muted); font-weight: 400; }
+        .bar-center { display: flex; align-items: center; gap: 20px; }
+        .bar-stat { text-align: center; }
+        .bar-stat-value { font-size: 16px; font-weight: 800; color: var(--heading); }
+        .bar-stat-label { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .bar-stat-sub { font-size: 10px; color: var(--muted); }
+        .bar-divider { width: 1px; height: 28px; background: var(--border); }
+        .bar-right { display: flex; align-items: center; gap: 8px; }
+
+        /* KPI (Dashboard) */
+        .kpi-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; }
+        .kpi-card { min-width: 170px; flex-shrink: 0; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; box-shadow: var(--card-shadow); }
+        .kpi-card:hover { box-shadow: var(--card-shadow-hover); }
+        .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+        .kpi-value-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+        .kpi-value { font-size: 24px; font-weight: 800; color: var(--heading); letter-spacing: -0.5px; }
+        .kpi-arrow { font-size: 12px; font-weight: 700; }
+        .kpi-sparkline { width: 100%; height: 28px; }
+        .kpi-sparkline svg { width: 100%; height: 100%; }
+
+        /* INSIGHT */
+        .insights-filter-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+        .insight-tab { padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--border); background: var(--white); border-radius: 6px; cursor: pointer; font-family: inherit; }
+        .insight-tab.active { background: var(--heading); color: var(--white); border-color: var(--heading); }
+        .insight-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; display: flex; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 12px; }
+        .insight-card:hover { box-shadow: var(--card-shadow-hover); }
+        .insight-stripe { width: 4px; flex-shrink: 0; }
+        .insight-stripe.critical { background: var(--black); }
+        .insight-stripe.high { background: #616161; }
+        .insight-stripe.medium { background: #BDBDBD; }
+        .insight-body { flex: 1; padding: 16px 20px; }
+        .insight-title { font-size: 14px; font-weight: 700; color: var(--heading); margin-bottom: 6px; }
+        .insight-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .insight-time { font-size: 11px; color: var(--muted); }
+        .insight-summary { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px; }
+        .insight-actions { display: flex; align-items: center; gap: 10px; }
+        .insight-link { font-size: 12px; font-weight: 600; color: var(--text); text-decoration: none; cursor: pointer; }
+        .push-btn { padding: 6px 14px; font-size: 12px; font-weight: 700; background: var(--heading); color: var(--white); border: none; border-radius: 6px; cursor: pointer; font-family: inherit; }
+        .feedback-btns { display: flex; gap: 4px; margin-left: auto; }
+        .feedback-btns button { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--white); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .feedback-btns button svg { width: 14px; height: 14px; color: var(--muted); }
+        .load-more-btn { display: block; margin: 0 auto; padding: 8px 24px; font-size: 13px; font-weight: 600; background: var(--white); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-family: inherit; }
+
+        /* TWIN */
+        .twin-overview-bar { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--card-shadow); flex-wrap: wrap; gap: 12px; }
+        .twin-tag { padding: 2px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .twin-tag.live { background: var(--heading); color: var(--white); }
+        .twin-tag.sim { background: #E0E0E0; color: var(--text); }
+        .dual-panel { display: flex; gap: 16px; min-height: 480px; }
+        .topo-panel { flex: 6; background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--card-shadow); position: relative; overflow: hidden; }
+        .topo-toolbar { position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; z-index: 5; }
+        .topo-toolbar button { padding: 5px 10px; font-size: 11px; font-weight: 600; background: var(--white); color: var(--text); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-family: inherit; }
+        .topo-legend { position: absolute; top: 12px; left: 12px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; font-size: 11px; z-index: 5; }
+        .topo-legend-title { font-weight: 700; color: var(--heading); margin-bottom: 6px; }
+        .topo-legend-item { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; color: var(--text); }
+        .topo-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+        .topo-minimap { position: absolute; bottom: 12px; left: 12px; width: 120px; height: 80px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; z-index: 5; display: flex; align-items: center; justify-content: center; }
+        .topo-minimap span { font-size: 9px; color: var(--muted); }
+        .topo-canvas { width: 100%; height: 100%; padding: 60px 20px 20px 20px; display: flex; align-items: center; justify-content: center; }
+        .topo-canvas svg { width: 100%; height: 100%; }
+        .changelog-panel { flex: 4; background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; overflow: hidden; }
+        .changelog-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--bg); }
+        .changelog-header-left { display: flex; align-items: center; gap: 8px; }
+        .changelog-header-left h3 { font-size: 14px; font-weight: 700; color: var(--heading); }
+        .changelog-count { padding: 2px 8px; font-size: 10px; font-weight: 700; background: #EEEEEE; color: var(--text); border-radius: 10px; }
+        .changelog-list { flex: 1; overflow-y: auto; }
+        .changelog-entry { display: flex; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #F0F0F0; position: relative; }
+        .changelog-entry:hover { background: #FAFAFA; }
+        .changelog-entry:hover .undo-btn { opacity: 1; }
+        .changelog-timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); margin-top: 5px; flex-shrink: 0; position: relative; }
+        .changelog-entry:not(:last-child) .changelog-timeline-dot::after { content: ''; position: absolute; left: 3px; top: 12px; width: 2px; height: calc(100% + 20px); background: #F0F0F0; }
+        .changelog-body { flex: 1; }
+        .changelog-time { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+        .changelog-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+        .changelog-tags { display: flex; gap: 6px; margin-top: 6px; }
+        .changelog-type-tag { padding: 2px 8px; font-size: 10px; font-weight: 600; border-radius: 4px; background: #F5F5F5; color: var(--muted); }
+        .undo-btn { opacity: 0; position: absolute; right: 16px; top: 14px; width: 28px; height: 28px; border: 1px solid var(--border); background: var(--white); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .undo-btn svg { width: 14px; height: 14px; color: var(--muted); }
+        .branch-name-link { font-weight: 600; color: var(--heading); cursor: pointer; text-decoration: none; }
+        .branch-name-link:hover { text-decoration: underline; }
+        .branch-status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; }
+        .branch-active { background: #E0E0E0; color: var(--text); }
+        .branch-merged { background: var(--heading); color: var(--white); }
+        .branch-stale { background: #F5F5F5; color: var(--muted); font-style: italic; }
+        .action-link { font-size: 12px; font-weight: 600; color: var(--text); text-decoration: none; cursor: pointer; margin-right: 10px; }
+        .action-link.disabled { color: var(--border); cursor: default; }
+        .overflow-menu { border: none; background: none; font-size: 18px; color: var(--muted); cursor: pointer; }
+
+        /* RESOURCE MONITORING SPECIFIC */
+        .chart-container { background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--card-shadow); overflow: hidden; }
+        .chart-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+        .chart-header-left { display: flex; align-items: center; gap: 12px; }
+        .chart-toggles { display: flex; gap: 4px; }
+        .chart-toggle { padding: 5px 12px; font-size: 11px; font-weight: 600; background: var(--white); color: var(--muted); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-family: inherit; }
+        .chart-toggle.active { background: var(--heading); color: var(--white); border-color: var(--heading); }
+        .chart-body { padding: 20px; position: relative; }
+        .chart-body svg { width: 100%; }
+        .chart-legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--bg); }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); }
+        .legend-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--border); }
+        .chart-annotations { display: flex; gap: 16px; padding: 10px 20px; border-top: 1px solid #F0F0F0; }
+        .annotation { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+        .annotation-flag { font-size: 13px; }
+
+        /* MICRO PROGRESS BAR */
+        .micro-bar { display: flex; align-items: center; gap: 8px; }
+        .micro-bar-track { flex: 1; height: 6px; background: #F0F0F0; border-radius: 3px; overflow: hidden; max-width: 80px; }
+        .micro-bar-fill { height: 100%; border-radius: 3px; background: var(--muted); }
+        .micro-bar-label { font-size: 12px; color: var(--text); font-weight: 600; }
+
+        /* CAP STATUS BADGES */
+        .cap-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; }
+        .cap-within { background: #F0F0F0; color: var(--text); }
+        .cap-approaching { background: #D0D0D0; color: var(--heading); }
+        .cap-exceeded { background: var(--heading); color: var(--white); }
+        .cap-none { background: transparent; color: var(--muted); font-style: italic; font-weight: 400; }
+
+        /* CAP CONFIG CARDS */
+        .cap-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--card-shadow); padding: 20px; margin-bottom: 16px; }
+        .cap-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .cap-card-title { font-size: 15px; font-weight: 700; color: var(--heading); }
+        .cap-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+        .cap-field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+        .cap-field input { width: 100%; padding: 8px 10px; font-size: 13px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; color: var(--text); }
+        .cap-field-usage { font-size: 11px; color: var(--muted); margin-top: 4px; }
+        .cap-field-bar { width: 100%; height: 4px; background: #F0F0F0; border-radius: 2px; margin-top: 4px; overflow: hidden; }
+        .cap-field-bar-fill { height: 100%; background: var(--muted); border-radius: 2px; }
+        .cap-bottom-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .cap-bottom-row select { padding: 7px 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; color: var(--text); background: var(--white); }
+        .cap-meta { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+        .cap-meta-text { font-size: 11px; color: var(--muted); }
+        .cap-meta-actions { display: flex; gap: 12px; margin-left: auto; }
+        .cap-meta-actions .btn-solid { padding: 6px 14px; font-size: 12px; }
+        .text-link { font-size: 12px; font-weight: 600; color: var(--text); background: none; border: none; cursor: pointer; font-family: inherit; text-decoration: underline; }
+        .text-link:hover { color: var(--heading); }
+        .text-link-danger { color: var(--heading); }
+
+        /* WEEKLY CARDS */
+        .weekly-cards { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+        .weekly-card { min-width: 150px; flex-shrink: 0; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 14px; cursor: pointer; transition: box-shadow 0.15s; text-align: center; }
+        .weekly-card:hover { box-shadow: var(--card-shadow-hover); }
+        .weekly-card.selected { border-color: var(--heading); box-shadow: 0 0 0 2px var(--heading); }
+        .weekly-card-date { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+        .weekly-card-cost { font-size: 18px; font-weight: 800; color: var(--heading); margin-bottom: 8px; }
+        .weekly-mini-bar { display: flex; height: 20px; border-radius: 3px; overflow: hidden; }
+        .weekly-mini-bar div { height: 100%; }
+
+        /* MODALS */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.open { display: flex; }
+        .modal { background: var(--white); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); width: 520px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+        .modal-header h2 { font-size: 16px; font-weight: 700; color: var(--heading); }
+        .modal-close { width: 32px; height: 32px; border: 1px solid var(--border); background: var(--white); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .modal-close svg { width: 16px; height: 16px; color: var(--text); }
+        .modal-body { padding: 24px; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+        .modal-cancel { font-size: 13px; font-weight: 500; color: var(--muted); background: none; border: none; cursor: pointer; font-family: inherit; }
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .form-input { width: 100%; padding: 9px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; color: var(--text); }
+        .form-textarea { width: 100%; padding: 9px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; color: var(--text); min-height: 80px; resize: vertical; }
+        .upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 40px; text-align: center; cursor: pointer; }
+        .upload-zone:hover { border-color: var(--muted); }
+        .upload-zone svg { color: var(--muted); width: 40px; height: 40px; margin-bottom: 12px; }
+        .upload-zone p { font-size: 14px; color: var(--text); font-weight: 500; }
+        .upload-zone small { font-size: 12px; color: var(--muted); }
+        .radio-group { display: flex; flex-direction: column; gap: 8px; }
+        .radio-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); cursor: pointer; }
+        .radio-label input { accent-color: var(--heading); }
+
+        /* CHAT */
+        .chat-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.2); z-index: 200; display: none; }
+        .chat-overlay.open { display: block; }
+        .chat-panel { position: fixed; top: 0; right: -420px; bottom: 0; width: 400px; background: var(--white); border-left: 1px solid var(--border); box-shadow: -8px 0 24px rgba(0,0,0,0.08); z-index: 201; display: flex; flex-direction: column; transition: right 0.3s ease; }
+        .chat-panel.open { right: 0; }
+        .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+        .chat-header-title { font-size: 15px; font-weight: 700; color: var(--heading); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+        .chat-bubble { max-width: 85%; padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; }
+        .chat-bubble.user { align-self: flex-end; background: var(--heading); color: var(--white); border-bottom-right-radius: 4px; }
+        .chat-bubble.ai { align-self: flex-start; background: var(--bg); color: var(--text); border-bottom-left-radius: 4px; }
+        .chat-action-card { margin-top: 8px; padding: 8px 12px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--heading); cursor: pointer; }
+        .typing-indicator { align-self: flex-start; display: flex; gap: 4px; padding: 12px 16px; background: var(--bg); border-radius: 10px; border-bottom-left-radius: 4px; }
+        .typing-dot { width: 7px; height: 7px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+        .chat-input-area { display: flex; gap: 8px; padding: 16px 20px; border-top: 1px solid var(--border); }
+        .chat-input { flex: 1; padding: 10px 14px; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; color: var(--text); background: var(--bg); }
+        .chat-send-btn { width: 40px; height: 40px; background: var(--heading); border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .chat-send-btn svg { color: var(--white); width: 18px; height: 18px; }
+        .tooltip-wrap { position: relative; }
+        .tooltip-wrap .tooltip-text { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--heading); color: var(--white); font-size: 11px; padding: 4px 10px; border-radius: 4px; white-space: nowrap; z-index: 50; }
+        .tooltip-wrap:hover .tooltip-text { display: block; }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; }
+        .status-running { background: var(--heading); color: var(--white); }
+        .status-completed { background: #E0E0E0; color: var(--text); }
+        .status-failed { background: var(--black); color: var(--white); }
+        .status-scheduled { background: #F5F5F5; color: var(--muted); border: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAV -->
+    <div class="topnav">
+        <div class="topnav-left">
+            <div class="logo"><div class="logo-icon"><i data-lucide="activity"></i></div>NetEvolve</div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-page="dashboard">Dashboard</button>
+                <button class="nav-tab" data-page="workflows">Workflows</button>
+                <button class="nav-tab" data-page="settings">Settings</button>
+                <button class="nav-tab" data-page="twin">Network Twin</button>
+                <button class="nav-tab" data-page="resources">Resource Monitoring <span class="admin-badge">ADMIN</span></button>
+            </div>
+        </div>
+        <div class="topnav-right">
+            <button class="ai-trigger-btn" onclick="openChat()"><i data-lucide="sparkles"></i>AI Assistant<kbd>/</kbd></button>
+            <div class="icon-btn"><i data-lucide="bell"></i><div class="badge-count">5</div></div>
+            <div class="user-avatar"></div>
+        </div>
+    </div>
+
+    <!-- ======================== PAGE: DASHBOARD ======================== -->
+    <div class="app-layout page-panel" id="page-dashboard">
+        <aside class="sidebar">
+            <div><div class="sidebar-section-title">Area of Interest</div><select class="sidebar-select"><option>All Areas</option><option>Network Enhancements</option><option>Lifecycle Management</option><option>Network Architecture</option></select></div>
+            <div><div class="sidebar-section-title">Status</div><div class="sidebar-check-group"><label class="sidebar-check"><input type="checkbox" checked> Running</label><label class="sidebar-check"><input type="checkbox" checked> Completed</label><label class="sidebar-check"><input type="checkbox" checked> Failed</label><label class="sidebar-check"><input type="checkbox"> Scheduled</label></div></div>
+            <div><div class="sidebar-toggle"><span>My Processes Only</span><div class="toggle-switch" onclick="this.classList.toggle('active')"></div></div></div>
+            <div><div class="sidebar-section-title">Date Range</div><div class="sidebar-date-group"><input type="date" class="sidebar-date-input" value="2025-01-01"><input type="date" class="sidebar-date-input" value="2025-01-19"></div></div>
+        </aside>
+        <div class="main-content">
+            <div><div class="section-header"><div class="section-title">Network KPIs</div><a class="section-link">Customize →</a></div>
+                <div class="kpi-row">
+                    <div class="kpi-card"><div class="kpi-label">Survivability</div><div class="kpi-value-row"><span class="kpi-value">99.98%</span><span class="kpi-arrow">▲ 0.02</span></div><div class="kpi-sparkline"><svg viewBox="0 0 120 28"><polyline fill="none" stroke="#9E9E9E" stroke-width="2" points="0,20 20,16 40,14 60,15 80,10 100,8 120,6"/></svg></div></div>
+                    <div class="kpi-card"><div class="kpi-label">SNR Optimization</div><div class="kpi-value-row"><span class="kpi-value">+1.2dB</span><span class="kpi-arrow">▲ 0.3</span></div><div class="kpi-sparkline"><svg viewBox="0 0 120 28"><polyline fill="none" stroke="#9E9E9E" stroke-width="2" points="0,22 20,18 40,20 60,16 80,12 100,10 120,8"/></svg></div></div>
+                    <div class="kpi-card"><div class="kpi-label">Forecast Capacity</div><div class="kpi-value-row"><span class="kpi-value">78%</span><span class="kpi-arrow">▼ 3.1</span></div><div class="kpi-sparkline"><svg viewBox="0 0 120 28"><polyline fill="none" stroke="#9E9E9E" stroke-width="2" points="0,8 20,12 40,14 60,15 80,18 100,21 120,22"/></svg></div></div>
+                    <div class="kpi-card"><div class="kpi-label">Defrag</div><div class="kpi-value-row"><span class="kpi-value">92%</span><span class="kpi-arrow">▲ 4.0</span></div><div class="kpi-sparkline"><svg viewBox="0 0 120 28"><polyline fill="none" stroke="#9E9E9E" stroke-width="2" points="0,24 20,18 40,16 60,14 80,10 100,8 120,6"/></svg></div></div>
+                    <div class="kpi-card"><div class="kpi-label">Failure Risk</div><div class="kpi-value-row"><span class="kpi-value">Low</span><span class="kpi-arrow">▲</span></div><div class="kpi-sparkline"><svg viewBox="0 0 120 28"><polyline fill="none" stroke="#9E9E9E" stroke-width="2" points="0,14 20,12 40,10 60,8 80,10 100,6 120,6"/></svg></div></div>
+                </div>
+            </div>
+            <div><div class="section-header"><div class="section-title">Process Status</div><a class="section-link">View All →</a></div>
+                <div class="table-wrapper"><table class="data-table"><thead><tr><th>Process Name</th><th>Workflow</th><th>Area</th><th>Status</th><th>Started</th><th>Duration</th><th>Triggered By</th></tr></thead><tbody>
+                    <tr><td style="font-weight:600;color:var(--heading)">SNR Opt — Metro Ring</td><td style="color:var(--muted)">WF-1023</td><td><span class="area-tag">Enhancements</span></td><td><span class="status-badge status-running">● Running</span></td><td>Jan 19, 03:00</td><td>2h 14m</td><td style="font-size:12px;color:var(--muted)">Scheduled</td></tr>
+                    <tr><td style="font-weight:600;color:var(--heading)">Capacity Compass</td><td style="color:var(--muted)">WF-0902</td><td><span class="area-tag">Lifecycle</span></td><td><span class="status-badge status-completed">✓ Completed</span></td><td>Jan 18, 22:00</td><td>4h 02m</td><td style="font-size:12px;color:var(--muted)">Scheduled</td></tr>
+                    <tr class="tooltip-wrap"><td style="font-weight:600;color:var(--heading)">Watchdog Sync<span class="tooltip-text">Exceeded 24h timeout</span></td><td style="color:var(--muted)">WF-1042</td><td><span class="area-tag">Architecture</span></td><td><span class="status-badge status-failed">⚠ Failed</span></td><td>Jan 17, 02:00</td><td>24h</td><td style="font-size:12px;color:var(--muted)">Scheduled</td></tr>
+                </tbody></table><div class="table-pagination"><span>1–3 of 24</span><div class="pagination-btns"><button class="active-page">1</button><button>2</button></div></div></div>
+            </div>
+            <div><div class="section-header"><div class="section-title">Insights</div></div>
+                <div class="insights-filter-tabs"><button class="insight-tab active">All</button><button class="insight-tab">Critical</button><button class="insight-tab">High</button><button class="insight-tab">Medium</button></div>
+                <div class="insight-card"><div class="insight-stripe critical"></div><div class="insight-body"><div class="insight-title">Photonic route optimization — 12 services impacted</div><div class="insight-meta"><span class="area-tag">Enhancements</span><span class="insight-time">2 hours ago</span></div><div class="insight-summary">Rerouting on Segment A-F can improve SNR by 2.3dB and reduce failure risk by 15%.</div><div class="insight-actions"><a class="insight-link">View Details →</a><button class="push-btn">Push to Network</button><div class="feedback-btns"><button><i data-lucide="thumbs-up"></i></button><button><i data-lucide="thumbs-down"></i></button></div></div></div></div>
+                <div class="insight-card"><div class="insight-stripe high"></div><div class="insight-body"><div class="insight-title">Capacity augmentation — London-Paris at 91%</div><div class="insight-meta"><span class="area-tag">Lifecycle</span><span class="insight-time">5 hours ago</span></div><div class="insight-summary">Threshold breach projected in 4 weeks. Recommend 2x transponders.</div><div class="insight-actions"><a class="insight-link">View Details →</a><button class="push-btn">Push to Network</button><div class="feedback-btns"><button><i data-lucide="thumbs-up"></i></button><button><i data-lucide="thumbs-down"></i></button></div></div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== PAGE: NETWORK TWIN ======================== -->
+    <div class="app-layout page-panel hidden" id="page-twin">
+        <aside class="sidebar">
+            <div><div class="sidebar-section-title">Branch</div><select class="sidebar-select" id="branchSelector" onchange="updateBranchContext()"><option value="master">Master</option><option value="john-sim">John — What-if Sim</option><option value="sarah-cap">Sarah — Capacity Test</option><option value="rollout-b">Rollout Scenario B</option></select></div>
+            <div><div class="sidebar-section-title">Compare With</div><select class="sidebar-select"><option>None</option><option>Master</option><option>John — What-if Sim</option></select></div>
+            <div><div class="sidebar-section-title">Update Source</div><div class="sidebar-check-group"><label class="sidebar-check"><input type="checkbox" checked> Scheduled Upload</label><label class="sidebar-check"><input type="checkbox" checked> Real-time Stream</label><label class="sidebar-check"><input type="checkbox"> Manual Edit</label><label class="sidebar-check"><input type="checkbox"> Merged</label></div></div>
+            <div><div class="sidebar-section-title">Data Type</div><div class="sidebar-check-group"><label class="sidebar-check"><input type="checkbox" checked> Topology</label><label class="sidebar-check"><input type="checkbox" checked> Configuration</label><label class="sidebar-check"><input type="checkbox" checked> PM Data</label><label class="sidebar-check"><input type="checkbox"> Service State</label></div></div>
+            <div><div class="sidebar-section-title">Date Range</div><div class="sidebar-date-group"><input type="date" class="sidebar-date-input" value="2025-01-01"><input type="date" class="sidebar-date-input" value="2025-01-19"></div></div>
+        </aside>
+        <div class="main-content">
+            <div class="twin-overview-bar">
+                <div class="bar-left"><span class="bar-context" id="overviewBranchName">Master</span><span class="twin-tag live" id="overviewBranchTag">Live</span><span class="bar-range">Last synced: 12 min ago</span></div>
+                <div class="bar-center"><div class="bar-stat"><div class="bar-stat-value">1,247</div><div class="bar-stat-label">Nodes</div></div><div class="bar-divider"></div><div class="bar-stat"><div class="bar-stat-value">3,892</div><div class="bar-stat-label">Links</div></div><div class="bar-divider"></div><div class="bar-stat"><div class="bar-stat-value">18,403</div><div class="bar-stat-label">Services</div></div><div class="bar-divider"></div><div class="bar-stat"><div class="bar-stat-value">14</div><div class="bar-stat-label">Pending</div></div></div>
+                <div class="bar-right"><button class="btn-outline" onclick="openModal('newBranchModal')">Create Branch</button><button class="btn-outline" onclick="openModal('uploadModal')">Upload File</button><button class="btn-solid" id="mergeBtn" disabled>Merge to Master</button></div>
+            </div>
+            <div class="dual-panel">
+                <div class="topo-panel">
+                    <div class="topo-legend"><div class="topo-legend-title">Legend</div><div class="topo-legend-item"><div class="topo-legend-dot" style="background:#D0D0D0"></div> Unchanged</div><div class="topo-legend-item"><div class="topo-legend-dot" style="background:#9E9E9E;border:2px dashed #616161"></div> Modified</div><div class="topo-legend-item"><div class="topo-legend-dot" style="background:#424242"></div> Added</div><div class="topo-legend-item"><div class="topo-legend-dot" style="background:#E0E0E0"></div> Removed</div></div>
+                    <div class="topo-toolbar"><button>Topology</button><button>Services</button><button>PM</button><button>+</button><button>−</button><button>⊡</button></div>
+                    <div class="topo-minimap"><span>Minimap</span></div>
+                    <div class="topo-canvas"><svg viewBox="0 0 600 350"><line x1="80" y1="100" x2="200" y2="60" stroke="#BDBDBD" stroke-width="3"/><line x1="200" y1="60" x2="340" y2="50" stroke="#BDBDBD" stroke-width="2"/><line x1="340" y1="50" x2="480" y2="80" stroke="#BDBDBD" stroke-width="4"/><line x1="80" y1="100" x2="150" y2="200" stroke="#9E9E9E" stroke-width="3" stroke-dasharray="6,3"/><line x1="150" y1="200" x2="300" y2="220" stroke="#BDBDBD" stroke-width="2"/><line x1="300" y1="220" x2="420" y2="190" stroke="#BDBDBD" stroke-width="3"/><circle cx="80" cy="100" r="18" fill="#D0D0D0" stroke="#BDBDBD" stroke-width="2"/><text x="80" y="104" text-anchor="middle" font-size="9" fill="#424242" font-weight="600">NYC</text><circle cx="200" cy="60" r="16" fill="#D0D0D0" stroke="#BDBDBD" stroke-width="2"/><text x="200" y="64" text-anchor="middle" font-size="9" fill="#424242" font-weight="600">BOS</text><circle cx="340" cy="50" r="20" fill="#D0D0D0" stroke="#BDBDBD" stroke-width="2"/><text x="340" y="54" text-anchor="middle" font-size="9" fill="#424242" font-weight="600">LON</text><circle cx="480" cy="80" r="18" fill="#D0D0D0" stroke="#BDBDBD" stroke-width="2"/><text x="480" y="84" text-anchor="middle" font-size="9" fill="#424242" font-weight="600">AMS</text><rect x="130" y="182" width="40" height="36" rx="6" fill="#9E9E9E" stroke="#616161" stroke-width="2" stroke-dasharray="5,3"/><text x="150" y="204" text-anchor="middle" font-size="8" fill="#FFF" font-weight="700">CHI</text><circle cx="300" cy="220" r="18" fill="#D0D0D0" stroke="#BDBDBD" stroke-width="2"/><text x="300" y="224" text-anchor="middle" font-size="9" fill="#424242" font-weight="600">PAR</text><rect x="400" y="172" width="40" height="36" rx="6" fill="#424242" stroke="#212121" stroke-width="2"/><text x="420" y="194" text-anchor="middle" font-size="8" fill="#FFF" font-weight="700">+BRU</text></svg></div>
+                </div>
+                <div class="changelog-panel">
+                    <div class="changelog-header"><div class="changelog-header-left"><h3>Change History</h3><span class="changelog-count">47</span></div><button class="icon-btn" style="width:28px;height:28px"><i data-lucide="download" style="width:14px;height:14px"></i></button></div>
+                    <div class="changelog-list">
+                        <div class="changelog-entry"><div class="changelog-timeline-dot" style="background:var(--heading)"></div><div class="changelog-body"><div class="changelog-time">Today, 09:14 AM</div><div class="changelog-text">3 nodes added, 7 links modified via scheduled upload</div><div class="changelog-tags"><span class="changelog-type-tag">Topology</span></div></div><button class="undo-btn"><i data-lucide="undo-2"></i></button></div>
+                        <div class="changelog-entry"><div class="changelog-timeline-dot"></div><div class="changelog-body"><div class="changelog-time">Today, 08:02 AM</div><div class="changelog-text">PM data refresh: 1,247 nodes via stream</div><div class="changelog-tags"><span class="changelog-type-tag">PM Data</span></div></div><button class="undo-btn"><i data-lucide="undo-2"></i></button></div>
+                        <div class="changelog-entry"><div class="changelog-timeline-dot"></div><div class="changelog-body"><div class="changelog-time">Yesterday, 11:30 PM</div><div class="changelog-text">User John D. removed Link F12-G08</div><div class="changelog-tags"><span class="changelog-type-tag">Manual</span></div></div><button class="undo-btn"><i data-lucide="undo-2"></i></button></div>
+                    </div>
+                    <div style="padding:12px 16px;border-top:1px solid var(--border);text-align:center"><button class="load-more-btn" style="margin:0;width:100%">Load Earlier</button></div>
+                </div>
+            </div>
+            <div><div class="section-header"><div class="section-title">All Branches <span class="section-subtitle">· 4 branches</span></div><button class="btn-outline" onclick="openModal('newBranchModal')">Create Branch</button></div>
+                <div class="table-wrapper"><table class="data-table"><thead><tr><th>Branch</th><th>Created By</th><th>From</th><th>Changes</th><th>Last Activity</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+                    <tr><td><a class="branch-name-link">Master</a></td><td>System</td><td>—</td><td>—</td><td>12 min ago</td><td><span class="branch-status branch-active">Active</span></td><td><a class="action-link">Open</a></td></tr>
+                    <tr><td><a class="branch-name-link">John — What-if Sim</a></td><td>John D.</td><td>Master</td><td>14</td><td>2h ago</td><td><span class="branch-status branch-active">Active</span></td><td><a class="action-link">Open</a><a class="action-link">Merge</a></td></tr>
+                    <tr><td><a class="branch-name-link">Sarah — Capacity</a></td><td>Sarah K.</td><td>Master</td><td>8</td><td>Yesterday</td><td><span class="branch-status branch-merged">✓ Merged</span></td><td><a class="action-link">Open</a></td></tr>
+                    <tr><td><a class="branch-name-link">Rollout Scenario B</a></td><td>Admin</td><td>Master</td><td>23</td><td>5d ago</td><td><span class="branch-status branch-stale">Stale</span></td><td><a class="action-link">Open</a><a class="action-link">Merge</a></td></tr>
+                </tbody></table></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== PAGE: RESOURCE MONITORING ======================== -->
+    <div class="app-layout page-panel hidden" id="page-resources">
+        <aside class="sidebar">
+            <div><div class="sidebar-section-title">Tenant / Customer</div><select class="sidebar-select"><option>All Tenants</option><option>Vodafone UK</option><option>Telstra</option><option>BT Group</option><option>Lumen Technologies</option></select></div>
+            <div><div class="sidebar-section-title">Time Range</div><select class="sidebar-select"><option>Last 30 Days</option><option>Today</option><option>Last 7 Days</option><option>Last 90 Days</option><option>Last 6 Months</option><option>Last 13 Months</option><option>Custom Range</option></select></div>
+            <div><div class="sidebar-section-title">Resource Type</div><div class="sidebar-check-group"><label class="sidebar-check"><input type="checkbox" checked> All</label><label class="sidebar-check"><input type="checkbox"> CPU</label><label class="sidebar-check"><input type="checkbox"> Memory</label><label class="sidebar-check"><input type="checkbox"> Storage</label><label class="sidebar-check"><input type="checkbox"> Network I/O</label></div></div>
+            <div><div class="sidebar-section-title">View By</div><div class="sidebar-radio-group"><label class="sidebar-radio"><input type="radio" name="viewBy" checked> Daily Breakdown</label><label class="sidebar-radio"><input type="radio" name="viewBy"> Weekly Summary</label></div></div>
+            <div><div class="sidebar-section-title">Cost Currency</div><select class="sidebar-select"><option>USD</option><option>EUR</option><option>GBP</option></select></div>
+        </aside>
+        <div class="main-content">
+
+            <!-- S1: COST OVERVIEW STRIP -->
+            <div class="overview-bar">
+                <div class="bar-left"><span class="bar-context">All Tenants</span><span class="bar-range">Last 30 Days</span></div>
+                <div class="bar-center">
+                    <div class="bar-stat"><div class="bar-stat-value">$14,892.47</div><div class="bar-stat-label">Total Cost</div></div>
+                    <div class="bar-divider"></div>
+                    <div class="bar-stat"><div class="bar-stat-value">$496.41</div><div class="bar-stat-label">Avg Daily</div></div>
+                    <div class="bar-divider"></div>
+                    <div class="bar-stat"><div class="bar-stat-value">$1,203.18</div><div class="bar-stat-label">Peak Day</div><div class="bar-stat-sub">Mar 12</div></div>
+                    <div class="bar-divider"></div>
+                    <div class="bar-stat"><div class="bar-stat-value">$15,240 ▲</div><div class="bar-stat-label">Projected Mo.</div></div>
+                </div>
+                <div class="bar-right"><button class="btn-outline"><i data-lucide="download"></i>Export</button><button class="btn-outline">Configure Caps</button></div>
+            </div>
+
+            <!-- S2: COST TREND CHART -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-header-left"><div class="section-title">Cost Trend</div></div>
+                    <div style="display:flex;gap:12px">
+                        <div class="chart-toggles"><button class="chart-toggle active">Stacked</button><button class="chart-toggle">Grouped</button><button class="chart-toggle">Line</button></div>
+                        <div class="chart-toggles"><button class="chart-toggle active">Per Tenant</button><button class="chart-toggle">Per Resource</button></div>
+                    </div>
+                </div>
+                <div class="chart-body">
+                    <svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Y-axis labels -->
+                        <text x="30" y="25" font-size="10" fill="#9E9E9E" text-anchor="end">$1.5k</text>
+                        <text x="30" y="75" font-size="10" fill="#9E9E9E" text-anchor="end">$1.0k</text>
+                        <text x="30" y="125" font-size="10" fill="#9E9E9E" text-anchor="end">$500</text>
+                        <text x="30" y="175" font-size="10" fill="#9E9E9E" text-anchor="end">$250</text>
+                        <text x="30" y="225" font-size="10" fill="#9E9E9E" text-anchor="end">$0</text>
+                        <!-- Grid lines -->
+                        <line x1="40" y1="20" x2="780" y2="20" stroke="#F0F0F0" stroke-width="1"/>
+                        <line x1="40" y1="70" x2="780" y2="70" stroke="#F0F0F0" stroke-width="1"/>
+                        <line x1="40" y1="120" x2="780" y2="120" stroke="#F0F0F0" stroke-width="1"/>
+                        <line x1="40" y1="170" x2="780" y2="170" stroke="#F0F0F0" stroke-width="1"/>
+                        <line x1="40" y1="220" x2="780" y2="220" stroke="#E0E0E0" stroke-width="1"/>
+                        <!-- Cap line -->
+                        <line x1="40" y1="40" x2="780" y2="40" stroke="#424242" stroke-width="1" stroke-dasharray="8,4"/>
+                        <text x="785" y="44" font-size="10" fill="#424242">Cap: $18k/mo</text>
+                        <!-- Stacked bars -->
+                        <g transform="translate(60,0)">
+                            <rect x="0" y="100" width="20" height="120" fill="#212121" rx="2"/>
+                            <rect x="0" y="130" width="20" height="90" fill="#616161" rx="2"/>
+                            <rect x="0" y="160" width="20" height="60" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="185" width="20" height="35" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 1</text>
+                        </g>
+                        <g transform="translate(110,0)">
+                            <rect x="0" y="90" width="20" height="130" fill="#212121" rx="2"/>
+                            <rect x="0" y="120" width="20" height="100" fill="#616161" rx="2"/>
+                            <rect x="0" y="155" width="20" height="65" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="182" width="20" height="38" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 4</text>
+                        </g>
+                        <g transform="translate(160,0)">
+                            <rect x="0" y="80" width="20" height="140" fill="#212121" rx="2"/>
+                            <rect x="0" y="115" width="20" height="105" fill="#616161" rx="2"/>
+                            <rect x="0" y="148" width="20" height="72" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="180" width="20" height="40" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 7</text>
+                        </g>
+                        <g transform="translate(210,0)">
+                            <rect x="0" y="110" width="20" height="110" fill="#212121" rx="2"/>
+                            <rect x="0" y="140" width="20" height="80" fill="#616161" rx="2"/>
+                            <rect x="0" y="165" width="20" height="55" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="190" width="20" height="30" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 10</text>
+                        </g>
+                        <g transform="translate(260,0)">
+                            <rect x="0" y="50" width="20" height="170" fill="#212121" rx="2"/>
+                            <rect x="0" y="90" width="20" height="130" fill="#616161" rx="2"/>
+                            <rect x="0" y="130" width="20" height="90" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="170" width="20" height="50" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 12</text>
+                        </g>
+                        <g transform="translate(310,0)">
+                            <rect x="0" y="95" width="20" height="125" fill="#212121" rx="2"/>
+                            <rect x="0" y="128" width="20" height="92" fill="#616161" rx="2"/>
+                            <rect x="0" y="160" width="20" height="60" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="186" width="20" height="34" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 15</text>
+                        </g>
+                        <g transform="translate(360,0)">
+                            <rect x="0" y="105" width="20" height="115" fill="#212121" rx="2"/>
+                            <rect x="0" y="135" width="20" height="85" fill="#616161" rx="2"/>
+                            <rect x="0" y="165" width="20" height="55" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="188" width="20" height="32" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 18</text>
+                        </g>
+                        <g transform="translate(410,0)">
+                            <rect x="0" y="100" width="20" height="120" fill="#212121" rx="2"/>
+                            <rect x="0" y="130" width="20" height="90" fill="#616161" rx="2"/>
+                            <rect x="0" y="162" width="20" height="58" fill="#9E9E9E" rx="2"/>
+                            <rect x="0" y="186" width="20" height="34" fill="#BDBDBD" rx="2"/>
+                            <text x="10" y="240" text-anchor="middle" font-size="9" fill="#9E9E9E">Mar 21</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item"><div class="legend-swatch" style="background:#212121"></div> Vodafone UK</div>
+                    <div class="legend-item"><div class="legend-swatch" style="background:#616161"></div> Telstra</div>
+                    <div class="legend-item"><div class="legend-swatch" style="background:#9E9E9E"></div> BT Group</div>
+                    <div class="legend-item"><div class="legend-swatch" style="background:#BDBDBD"></div> Lumen Technologies</div>
+                </div>
+                <div class="chart-annotations">
+                    <div class="annotation"><span class="annotation-flag">🚩</span> Mar 12: Spike — 3 concurrent large workflows</div>
+                    <div class="annotation"><span class="annotation-flag">⚠</span> Mar 12: Cap threshold reached (90%)</div>
+                </div>
+            </div>
+
+            <!-- S3: TENANT BREAKDOWN TABLE -->
+            <div>
+                <div class="section-header"><div class="section-title">Tenant Usage Breakdown <span class="section-subtitle">· Last 30 Days</span></div><a class="section-link"><i data-lucide="download" style="width:12px;height:12px;vertical-align:middle"></i> CSV</a></div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead><tr><th>Tenant ↓</th><th>CPU Hours</th><th>Mem Peak</th><th>Mem Avg</th><th>Storage</th><th>Net I/O</th><th>Total Cost ↓</th><th>% of Total</th><th>Cap Status</th><th>Trend</th></tr></thead>
+                        <tbody>
+                            <tr><td style="font-weight:700;color:var(--heading);cursor:pointer">Vodafone UK</td><td>1,247 hrs</td><td>64 GB</td><td>38 GB</td><td>2.4 TB</td><td>847 GB</td><td style="font-weight:700">$4,218.93</td><td><div class="micro-bar"><div class="micro-bar-track"><div class="micro-bar-fill" style="width:28%"></div></div><span class="micro-bar-label">28.3%</span></div></td><td><span class="cap-badge cap-within">✓ Within</span></td><td><svg viewBox="0 0 60 20" width="60" height="20"><polyline fill="none" stroke="#9E9E9E" stroke-width="1.5" points="0,15 10,12 20,10 30,8 40,10 50,6 60,5"/></svg></td></tr>
+                            <tr><td style="font-weight:700;color:var(--heading);cursor:pointer">Telstra</td><td>982 hrs</td><td>48 GB</td><td>31 GB</td><td>1.8 TB</td><td>621 GB</td><td style="font-weight:700">$3,847.21</td><td><div class="micro-bar"><div class="micro-bar-track"><div class="micro-bar-fill" style="width:26%"></div></div><span class="micro-bar-label">25.8%</span></div></td><td class="tooltip-wrap"><span class="cap-badge cap-approaching">⚠ 87%</span><span class="tooltip-text">Approaching CPU cap since Mar 10</span></td><td><svg viewBox="0 0 60 20" width="60" height="20"><polyline fill="none" stroke="#9E9E9E" stroke-width="1.5" points="0,12 10,10 20,14 30,8 40,6 50,4 60,3"/></svg></td></tr>
+                            <tr><td style="font-weight:700;color:var(--heading);cursor:pointer">BT Group</td><td>1,103 hrs</td><td>52 GB</td><td>34 GB</td><td>2.1 TB</td><td>738 GB</td><td style="font-weight:700">$3,682.14</td><td><div class="micro-bar"><div class="micro-bar-track"><div class="micro-bar-fill" style="width:25%"></div></div><span class="micro-bar-label">24.7%</span></div></td><td><span class="cap-badge cap-within">✓ Within</span></td><td><svg viewBox="0 0 60 20" width="60" height="20"><polyline fill="none" stroke="#9E9E9E" stroke-width="1.5" points="0,10 10,12 20,10 30,11 40,9 50,8 60,7"/></svg></td></tr>
+                            <tr><td style="font-weight:700;color:var(--heading);cursor:pointer">Lumen Technologies</td><td>847 hrs</td><td>40 GB</td><td>26 GB</td><td>1.4 TB</td><td>492 GB</td><td style="font-weight:700">$3,144.19</td><td><div class="micro-bar"><div class="micro-bar-track"><div class="micro-bar-fill" style="width:21%"></div></div><span class="micro-bar-label">21.1%</span></div></td><td><span class="cap-badge cap-none">— No Cap</span></td><td><svg viewBox="0 0 60 20" width="60" height="20"><polyline fill="none" stroke="#9E9E9E" stroke-width="1.5" points="0,14 10,13 20,12 30,10 40,11 50,10 60,9"/></svg></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="table-pagination"><span>1–4 of 4 tenants</span><div class="pagination-btns"><button class="active-page">1</button></div></div>
+                </div>
+            </div>
+
+            <!-- S4: WEEKLY SUMMARY -->
+            <div>
+                <div class="section-header"><div class="section-title">Weekly Cost Summaries <span class="section-subtitle">· Stored for 13 months</span></div><div class="chart-toggles"><button class="chart-toggle active" onclick="document.getElementById('weeklyTable').classList.remove('hidden');document.getElementById('weeklyTimeline').classList.add('hidden')">Table</button><button class="chart-toggle" onclick="document.getElementById('weeklyTimeline').classList.remove('hidden');document.getElementById('weeklyTable').classList.add('hidden')">Timeline</button></div></div>
+                <div id="weeklyTable" class="table-wrapper">
+                    <table class="data-table">
+                        <thead><tr><th>Week</th><th>CPU $</th><th>Memory $</th><th>Storage $</th><th>Net I/O $</th><th>Weekly Total</th><th>vs Prev Week</th></tr></thead>
+                        <tbody>
+                            <tr><td>Mar 10 – Mar 16</td><td>$1,842</td><td>$924</td><td>$687</td><td>$312</td><td style="font-weight:700">$3,765</td><td style="font-weight:600">▲ 12.4%</td></tr>
+                            <tr><td>Mar 3 – Mar 9</td><td>$1,621</td><td>$891</td><td>$672</td><td>$298</td><td style="font-weight:700">$3,482</td><td style="font-weight:600">▲ 3.2%</td></tr>
+                            <tr><td>Feb 24 – Mar 2</td><td>$1,587</td><td>$864</td><td>$654</td><td>$269</td><td style="font-weight:700">$3,374</td><td style="font-weight:600">▼ 1.8%</td></tr>
+                            <tr><td>Feb 17 – Feb 23</td><td>$1,612</td><td>$882</td><td>$661</td><td>$281</td><td style="font-weight:700">$3,436</td><td style="font-weight:600">▲ 5.1%</td></tr>
+                            <tr><td>Feb 10 – Feb 16</td><td>$1,534</td><td>$838</td><td>$642</td><td>$255</td><td style="font-weight:700">$3,269</td><td style="font-weight:600">▼ 2.4%</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="table-pagination"><span>Showing 5 of 56 weeks</span><div class="pagination-btns"><button class="active-page">1</button><button>2</button><button>3</button></div></div>
+                </div>
+                <div id="weeklyTimeline" class="hidden">
+                    <div class="weekly-cards">
+                        <div class="weekly-card selected"><div class="weekly-card-date">Mar 10–16</div><div class="weekly-card-cost">$3,765</div><div class="weekly-mini-bar"><div style="width:49%;background:#212121"></div><div style="width:25%;background:#616161"></div><div style="width:18%;background:#9E9E9E"></div><div style="width:8%;background:#BDBDBD"></div></div></div>
+                        <div class="weekly-card"><div class="weekly-card-date">Mar 3–9</div><div class="weekly-card-cost">$3,482</div><div class="weekly-mini-bar"><div style="width:47%;background:#212121"></div><div style="width:26%;background:#616161"></div><div style="width:19%;background:#9E9E9E"></div><div style="width:8%;background:#BDBDBD"></div></div></div>
+                        <div class="weekly-card"><div class="weekly-card-date">Feb 24–Mar 2</div><div class="weekly-card-cost">$3,374</div><div class="weekly-mini-bar"><div style="width:47%;background:#212121"></div><div style="width:26%;background:#616161"></div><div style="width:19%;background:#9E9E9E"></div><div style="width:8%;background:#BDBDBD"></div></div></div>
+                        <div class="weekly-card"><div class="weekly-card-date">Feb 17–23</div><div class="weekly-card-cost">$3,436</div><div class="weekly-mini-bar"><div style="width:47%;background:#212121"></div><div style="width:26%;background:#616161"></div><div style="width:19%;background:#9E9E9E"></div><div style="width:8%;background:#BDBDBD"></div></div></div>
+                        <div class="weekly-card"><div class="weekly-card-date">Feb 10–16</div><div class="weekly-card-cost">$3,269</div><div class="weekly-mini-bar"><div style="width:47%;background:#212121"></div><div style="width:26%;background:#616161"></div><div style="width:19%;background:#9E9E9E"></div><div style="width:8%;background:#BDBDBD"></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- S5: CAPPING CONFIG -->
+            <div>
+                <div class="section-header"><div class="section-title">Resource Caps & Limits</div><button class="btn-outline">+ Add New Cap Rule</button></div>
+                <!-- Cap Card 1 -->
+                <div class="cap-card">
+                    <div class="cap-card-header"><div class="cap-card-title">All Tenants (Global)</div><div class="toggle-switch active" onclick="this.classList.toggle('active')"></div></div>
+                    <div class="cap-fields">
+                        <div class="cap-field"><label>CPU Limit</label><input value="2,000 vCPU hrs/day"><div class="cap-field-usage">Currently: 72%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:72%"></div></div></div>
+                        <div class="cap-field"><label>Memory Limit</label><input value="128 GB peak"><div class="cap-field-usage">Currently: 50%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:50%"></div></div></div>
+                        <div class="cap-field"><label>Storage Limit</label><input value="10 TB"><div class="cap-field-usage">Currently: 78%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:78%"></div></div></div>
+                        <div class="cap-field"><label>Monthly Cost Limit</label><input value="$18,000"><div class="cap-field-usage">Currently: 83%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:83%"></div></div></div>
+                    </div>
+                    <div class="cap-bottom-row">
+                        <div><label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">ALERT AT</label><select><option>90%</option><option>85%</option><option>80%</option><option>75%</option></select></div>
+                        <div><label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">WHEN EXCEEDED</label><select><option>Notify Admin Only</option><option>Queue New Processes</option><option>Throttle Processing</option><option>Block New Processes</option></select></div>
+                    </div>
+                    <div class="cap-meta"><span class="cap-meta-text">Modified: Mar 15 by Admin</span><div class="cap-meta-actions"><button class="text-link">Reset</button><button class="text-link text-link-danger">Delete</button><button class="btn-solid">Save Changes</button></div></div>
+                </div>
+                <!-- Cap Card 2 -->
+                <div class="cap-card">
+                    <div class="cap-card-header"><div class="cap-card-title">Telstra</div><div class="toggle-switch active" onclick="this.classList.toggle('active')"></div></div>
+                    <div class="cap-fields">
+                        <div class="cap-field"><label>CPU Limit</label><input value="500 vCPU hrs/day"><div class="cap-field-usage">Currently: 87%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:87%"></div></div></div>
+                        <div class="cap-field"><label>Memory Limit</label><input value="48 GB peak"><div class="cap-field-usage">Currently: 100%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:100%"></div></div></div>
+                        <div class="cap-field"><label>Storage Limit</label><input value="3 TB"><div class="cap-field-usage">Currently: 60%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:60%"></div></div></div>
+                        <div class="cap-field"><label>Monthly Cost Limit</label><input value="$5,000"><div class="cap-field-usage">Currently: 77%</div><div class="cap-field-bar"><div class="cap-field-bar-fill" style="width:77%"></div></div></div>
+                    </div>
+                    <div class="cap-bottom-row">
+                        <div><label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">ALERT AT</label><select><option>85%</option><option>90%</option><option>80%</option></select></div>
+                        <div><label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">WHEN EXCEEDED</label><select><option>Throttle Processing</option><option>Notify Admin Only</option><option>Queue New Processes</option><option>Block New Processes</option></select></div>
+                    </div>
+                    <div class="cap-meta"><span class="cap-meta-text">Modified: Mar 10 by Sarah K.</span><div class="cap-meta-actions"><button class="text-link">Reset</button><button class="text-link text-link-danger">Delete</button><button class="btn-solid">Save Changes</button></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLACEHOLDER PAGES -->
+    <div class="app-layout page-panel hidden" id="page-workflows"><div class="main-content" style="align-items:center;justify-content:center"><div style="text-align:center"><div style="font-size:48px;color:var(--border);margin-bottom:16px">⚙</div><h2 style="font-size:20px;font-weight:700;color:var(--heading)">Workflows</h2><p style="color:var(--muted)">Coming soon</p></div></div></div>
+    <div class="app-layout page-panel hidden" id="page-settings"><div class="main-content" style="align-items:center;justify-content:center"><div style="text-align:center"><div style="font-size:48px;color:var(--border);margin-bottom:16px">⚙</div><h2 style="font-size:20px;font-weight:700;color:var(--heading)">Settings</h2><p style="color:var(--muted)">Coming soon</p></div></div></div>
+
+    <!-- MODALS -->
+    <div class="modal-overlay" id="uploadModal"><div class="modal" onclick="event.stopPropagation()"><div class="modal-header"><h2>Upload Network File</h2><button class="modal-close" onclick="closeModal('uploadModal')"><i data-lucide="x"></i></button></div><div class="modal-body"><div class="upload-zone"><i data-lucide="cloud-upload"></i><p>Drag and drop or click to browse</p><small>.xml, .json, .csv (max 500MB)</small></div><div class="form-group" style="margin-top:20px"><label class="form-label">Target Branch</label><select class="sidebar-select"><option>Master</option></select></div><div class="form-group"><label class="form-label">Upload Type</label><div class="radio-group"><label class="radio-label"><input type="radio" name="ut" checked> Full Replacement</label><label class="radio-label"><input type="radio" name="ut"> Incremental</label></div></div></div><div class="modal-footer"><button class="modal-cancel" onclick="closeModal('uploadModal')">Cancel</button><button class="btn-solid">Upload</button></div></div></div>
+    <div class="modal-overlay" id="newBranchModal"><div class="modal" onclick="event.stopPropagation()"><div class="modal-header"><h2>Create New Branch</h2><button class="modal-close" onclick="closeModal('newBranchModal')"><i data-lucide="x"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Branch Name</label><input class="form-input" placeholder="e.g., Q3 Capacity Planning"></div><div class="form-group"><label class="form-label">Branch From</label><select class="sidebar-select"><option>Master</option></select></div><div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" placeholder="Purpose of this branch..."></textarea></div></div><div class="modal-footer"><button class="modal-cancel" onclick="closeModal('newBranchModal')">Cancel</button><button class="btn-solid">Create Branch</button></div></div></div>
+
+    <!-- AI CHAT -->
+    <div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header"><span class="chat-header-title">AI Assistant</span><button class="modal-close" onclick="closeChat()"><i data-lucide="x"></i></button></div>
+        <div class="chat-messages">
+            <div class="chat-bubble user">What was Vodafone's total cost last month?</div>
+            <div class="chat-bubble ai">Vodafone UK's total resource cost for last month was $4,218.93 across CPU, Memory, Storage, and Network I/O. They are currently within their cap limits.<div class="chat-action-card">View Vodafone Breakdown →</div></div>
+            <div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+        </div>
+        <div class="chat-input-area"><input type="text" class="chat-input" placeholder="Ask about costs, usage, or caps..."><button class="chat-send-btn"><i data-lucide="arrow-up"></i></button></div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Page nav
+        var navTabs = document.querySelectorAll('.nav-tab');
+        for (var i = 0; i < navTabs.length; i++) {
+            navTabs[i].addEventListener('click', function() {
+                var page = this.getAttribute('data-page');
+                var panels = document.querySelectorAll('.page-panel');
+                for (var j = 0; j < panels.length; j++) panels[j].classList.add('hidden');
+                var target = document.getElementById('page-' + page);
+                if (target) target.classList.remove('hidden');
+                for (var k = 0; k < navTabs.length; k++) navTabs[k].classList.remove('active');
+                this.classList.add('active');
+            });
+        }
+
+        // Branch context
+        function updateBranchContext() {
+            var sel = document.getElementById('branchSelector');
+            var name = sel.options[sel.selectedIndex].text;
+            var isMaster = sel.value === 'master';
+            document.getElementById('overviewBranchName').textContent = name;
+            var tag = document.getElementById('overviewBranchTag');
+            tag.textContent = isMaster ? 'Live' : 'Simulation';
+            tag.className = isMaster ? 'twin-tag live' : 'twin-tag sim';
+            document.getElementById('mergeBtn').disabled = isMaster;
+        }
+
+        // Modals
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+        // Chat
+        function openChat() {
+            document.getElementById('chatOverlay').classList.add('open');
+            document.getElementById('chatPanel').classList.add('open');
+            setTimeout(function() { document.querySelector('.chat-input').focus(); }, 300);
+        }
+        function closeChat() {
+            document.getElementById('chatOverlay').classList.remove('open');
+            document.getElementById('chatPanel').classList.remove('open');
+        }
+
+        // Keys
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); openChat(); }
+            if (e.key === 'Escape') { closeChat(); closeModal('uploadModal'); closeModal('newBranchModal'); }
+        });
+
+        // Modal overlay close
+        var overlays = document.querySelectorAll('.modal-overlay');
+        for (var m = 0; m < overlays.length; m++) {
+            overlays[m].addEventListener('click', function() { this.classList.remove('open'); });
+        }
+    </script>
+</body>
+</html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
