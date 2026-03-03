@@ -1,0 +1,744 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Service Aggregator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-primary:active {
+            background-color: #004080;
+        }
+
+        .btn-primary:disabled {
+            background-color: #99c2e6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid #ccc;
+            padding: 10px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f5f5f5;
+            border-color: #999;
+        }
+
+        .btn-secondary:active {
+            background-color: #e8e8e8;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Modal */
+        .modal {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 95%;
+            max-width: 1100px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        /* Read-only data section */
+        .readonly-section {
+            background-color: #f8f9fb;
+            border: 1px solid #e2e6ea;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .readonly-section h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #666;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .readonly-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .readonly-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .readonly-item .label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .readonly-item .value {
+            font-size: 15px;
+            color: #1a1a1a;
+            font-weight: 500;
+            background-color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Time slots section */
+        .timeslots-section {
+            margin-bottom: 24px;
+        }
+
+        .timeslots-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .timeslots-display .text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .timeslots-display .counter {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0066cc;
+            margin-left: auto;
+            background: #f0f4f8;
+            padding: 4px 16px;
+            border-radius: 20px;
+            border: 2px solid #0066cc;
+        }
+
+        .timeslots-display.full .counter {
+            color: #cc0000;
+            border-color: #cc0000;
+            background: #fff0f0;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #0066cc;
+            border-radius: 3px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .progress-fill.full {
+            background-color: #cc0000;
+        }
+
+        /* Error message */
+        .error-message {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background-color: #fff0f0;
+            border: 1px solid #ffcccc;
+            border-left: 4px solid #cc0000;
+            border-radius: 6px;
+            color: #cc0000;
+            font-weight: 600;
+            font-size: 14px;
+            align-items: center;
+            gap: 8px;
+            animation: shakeIn 0.4s ease;
+        }
+
+        .error-message.visible {
+            display: flex;
+        }
+
+        @keyframes shakeIn {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .error-message .error-icon {
+            font-size: 18px;
+        }
+
+        /* Table section */
+        .table-section {
+            margin-bottom: 28px;
+        }
+
+        .table-section h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .table-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f0f2f5;
+        }
+
+        thead th {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #d0d5dd;
+        }
+
+        thead th:first-child {
+            width: 50px;
+            text-align: center;
+        }
+
+        tbody tr {
+            transition: background-color 0.15s ease;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f8ff;
+        }
+
+        tbody tr.selected {
+            background-color: #e8f0fe;
+        }
+
+        tbody tr.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        tbody td {
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        tbody td:first-child {
+            text-align: center;
+        }
+
+        /* Custom checkbox */
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+
+        .custom-checkbox input {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .custom-checkbox .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #0066cc;
+            border-color: #0066cc;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .custom-checkbox input:disabled {
+            cursor: not-allowed;
+        }
+
+        .custom-checkbox input:disabled ~ .checkmark {
+            background-color: #e8e8e8;
+            border-color: #d0d0d0;
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+            padding: 20px 32px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background-color: #fafafa;
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .readonly-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-header {
+                padding: 18px 20px;
+            }
+
+            .modal-footer {
+                padding: 16px 20px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 700px;
+            }
+        }
+
+        /* Scrollbar styling */
+        .modal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .modal::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border-radius: 4px;
+        }
+
+        .modal::-webkit-scrollbar-thumb:hover {
+            background: #a0a0a0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <button class="btn-primary" id="openModalBtn">Aggregate</button>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h2>Client Service Aggregator</h2>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Read-only Data -->
+                <div class="readonly-section">
+                    <h3>Service Details</h3>
+                    <div class="readonly-grid">
+                        <div class="readonly-item">
+                            <span class="label">Source Site</span>
+                            <span class="value">New York - DC1</span>
+                        </div>
+                        <div class="readonly-item">
+                            <span class="label">Destination Site</span>
+                            <span class="value">Los Angeles - DC2</span>
+                        </div>
+                        <div class="readonly-item">
+                            <span class="label">Source NE</span>
+                            <span class="value">NE-NYC-001</span>
+                        </div>
+                        <div class="readonly-item">
+                            <span class="label">Destination NE</span>
+                            <span class="value">NE-LAX-002</span>
+                        </div>
+                        <div class="readonly-item">
+                            <span class="label">Source Client Port AID</span>
+                            <span class="value">SRC-PORT-1-1-C1</span>
+                        </div>
+                        <div class="readonly-item">
+                            <span class="label">Destination Client Port AID</span>
+                            <span class="value">DST-PORT-2-1-C1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Time Slots -->
+                <div class="timeslots-section">
+                    <div class="timeslots-display" id="timeslotsDisplay">
+                        <span class="text">Available Time Slots</span>
+                        <span class="counter" id="timeslotsCounter">0 / 8</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="error-message" id="errorMessage">
+                        <span class="error-icon">⚠️</span>
+                        <span>No more capacity available</span>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-section">
+                    <h3>Available Services</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Source Site</th>
+                                    <th>Destination Site</th>
+                                    <th>Source NE</th>
+                                    <th>Destination NE</th>
+                                    <th>Source Client Port AID</th>
+                                    <th>Destination Client Port AID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn-primary" id="aggregateBtn">Aggregate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tableData = [
+            { srcSite: "Chicago - DC3", dstSite: "Houston - DC4", srcNE: "NE-CHI-003", dstNE: "NE-HOU-004", srcPort: "SRC-PORT-3-1-C2", dstPort: "DST-PORT-4-1-C2" },
+            { srcSite: "Seattle - DC5", dstSite: "Miami - DC6", srcNE: "NE-SEA-005", dstNE: "NE-MIA-006", srcPort: "SRC-PORT-5-2-C1", dstPort: "DST-PORT-6-2-C1" },
+            { srcSite: "Denver - DC7", dstSite: "Boston - DC8", srcNE: "NE-DEN-007", dstNE: "NE-BOS-008", srcPort: "SRC-PORT-7-1-C3", dstPort: "DST-PORT-8-1-C3" },
+            { srcSite: "Dallas - DC9", dstSite: "Phoenix - DC10", srcNE: "NE-DAL-009", dstNE: "NE-PHX-010", srcPort: "SRC-PORT-9-3-C1", dstPort: "DST-PORT-10-3-C1" },
+            { srcSite: "Atlanta - DC11", dstSite: "Portland - DC12", srcNE: "NE-ATL-011", dstNE: "NE-PDX-012", srcPort: "SRC-PORT-11-1-C4", dstPort: "DST-PORT-12-1-C4" },
+            { srcSite: "Detroit - DC13", dstSite: "San Diego - DC14", srcNE: "NE-DET-013", dstNE: "NE-SAN-014", srcPort: "SRC-PORT-13-2-C2", dstPort: "DST-PORT-14-2-C2" },
+            { srcSite: "Minneapolis - DC15", dstSite: "Orlando - DC16", srcNE: "NE-MIN-015", dstNE: "NE-ORL-016", srcPort: "SRC-PORT-15-1-C5", dstPort: "DST-PORT-16-1-C5" },
+            { srcSite: "Nashville - DC17", dstSite: "Austin - DC18", srcNE: "NE-NAS-017", dstNE: "NE-AUS-018", srcPort: "SRC-PORT-17-3-C2", dstPort: "DST-PORT-18-3-C2" },
+            { srcSite: "Charlotte - DC19", dstSite: "Las Vegas - DC20", srcNE: "NE-CLT-019", dstNE: "NE-LAS-020", srcPort: "SRC-PORT-19-1-C6", dstPort: "DST-PORT-20-1-C6" },
+            { srcSite: "Tampa - DC21", dstSite: "Sacramento - DC22", srcNE: "NE-TPA-021", dstNE: "NE-SAC-022", srcPort: "SRC-PORT-21-2-C3", dstPort: "DST-PORT-22-2-C3" }
+        ];
+
+        const MAX_SLOTS = 8;
+        const SLOTS_PER_ROW = 2;
+        let selectedCount = 0;
+
+        const openModalBtn = document.getElementById('openModalBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const aggregateBtn = document.getElementById('aggregateBtn');
+        const tableBody = document.getElementById('tableBody');
+        const timeslotsCounter = document.getElementById('timeslotsCounter');
+        const timeslotsDisplay = document.getElementById('timeslotsDisplay');
+        const progressFill = document.getElementById('progressFill');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function generateTable() {
+            tableBody.innerHTML = '';
+            tableData.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <label class="custom-checkbox">
+                            <input type="checkbox" data-index="${index}" class="row-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td>${row.srcSite}</td>
+                    <td>${row.dstSite}</td>
+                    <td>${row.srcNE}</td>
+                    <td>${row.dstNE}</td>
+                    <td>${row.srcPort}</td>
+                    <td>${row.dstPort}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function updateTimeslots() {
+            const usedSlots = selectedCount * SLOTS_PER_ROW;
+            timeslotsCounter.textContent = `${usedSlots} / ${MAX_SLOTS}`;
+
+            const percentage = (usedSlots / MAX_SLOTS) * 100;
+            progressFill.style.width = `${percentage}%`;
+
+            if (usedSlots >= MAX_SLOTS) {
+                timeslotsDisplay.classList.add('full');
+                progressFill.classList.add('full');
+                errorMessage.classList.add('visible');
+            } else {
+                timeslotsDisplay.classList.remove('full');
+                progressFill.classList.remove('full');
+                errorMessage.classList.remove('visible');
+            }
+
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => {
+                const tr = cb.closest('tr');
+                if (!cb.checked && usedSlots >= MAX_SLOTS) {
+                    cb.disabled = true;
+                    tr.classList.add('disabled');
+                } else {
+                    cb.disabled = false;
+                    tr.classList.remove('disabled');
+                }
+
+                if (cb.checked) {
+                    tr.classList.add('selected');
+                } else {
+                    tr.classList.remove('selected');
+                }
+            });
+        }
+
+        tableBody.addEventListener('change', (e) => {
+            if (e.target.classList.contains('row-checkbox')) {
+                if (e.target.checked) {
+                    selectedCount++;
+                } else {
+                    selectedCount--;
+                }
+                updateTimeslots();
+            }
+        });
+
+        openModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            selectedCount = 0;
+            generateTable();
+            updateTimeslots();
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        aggregateBtn.addEventListener('click', () => {
+            if (selectedCount === 0) {
+                alert('Please select at least one service to aggregate.');
+                return;
+            }
+            const usedSlots = selectedCount * SLOTS_PER_ROW;
+            alert(`Aggregation successful!\n\nTime slots used: ${usedSlots}/${MAX_SLOTS}\nServices selected: ${selectedCount}`);
+            closeModal();
+        });
+
+        generateTable();
+        updateTimeslots();
+    </script>
+
+</body>
+</html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
